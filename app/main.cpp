@@ -271,6 +271,10 @@ int main(){
                         string s1;
                         string s2;
                         Assignment tmp;
+
+                        save_student_info(student_deets);
+                        student_deets = extract_student_info();
+                        
                         switch (a)
                         {
                         case 1:
@@ -286,13 +290,19 @@ int main(){
                             cin>>s1;
                             cout<<"Enter assignment number: ";
                             cin>>b;
-                            student_deets = extract_student_info();
+                            
+                            admin.display_student_assignment_status(tasks[b-1],s1);
+                            break;
+                        case 4:
+                            admin.display_assignment_deadlines();
+                            break;
+
+                        case 5:
                             cout<<"Enter name of assignment: ";
                             cin>>s1;
                             cout<<"Enter deadline: ";
                             cin>>s2; 
                             tmp.set(s1 , s2);
-                            tasks.push_back(tmp);
                             admin.create_assignment(tmp);
                             break;
                         case 6:
@@ -314,7 +324,7 @@ int main(){
                             cout<<"Enter change to be added:\n";
                             cin>>s2; 
                             admin.add_change(s1,s2,tasks[b-1]);
-                            save_student_info(student_deets);
+                            
                             break;
                         case 10:
                             cout<<"Enter new progress status(not reviewed ,changes pending or completed): ";
