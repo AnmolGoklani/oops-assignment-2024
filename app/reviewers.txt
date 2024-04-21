@@ -1,13 +1,12 @@
 bhoomi 1234
-akhil 5678
 rishi 1234
-ronitbeast 1234[6~
 -1
 https://github.com/AnmolGoklani/html-css
 https://github.com/AnmolGoklani/git-assignment-2024
 github.com
+google.com
 -1
-doubt1 - anmol
 doubt2 - anmol
 doubt3 - ayushka
+doubt
 -1

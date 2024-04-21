@@ -17,14 +17,17 @@ class Student : public IMG_Member{
         void list_pending_long();
         void display_assignment_details(Assignment assignment);
         void list_of_completed();
-        void add_change(string change, Assignment assignment);
-        void set_status(Assignment assignment , iteration status);
+        //void add_change(string change, Assignment assignment);
+        //void set_status(Assignment assignment , iteration status);
+
+        S_Assignment_info& get_info(Assignment assi);
+
         void add_assignment(S_Assignment_info info , Assignment assignment);
         iteration get_status(Assignment assi);
         vector <string> get_changes(Assignment assi);
         string get_date(Assignment assi);
-        //void submit(string link);
-        //void ask_doubt(string doubt);
+        void submit(string link);
+        void ask_doubt(string doubt);
 
     private:
         int pending_assignments = 0;

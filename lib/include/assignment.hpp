@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "fstream"
 
 
 
@@ -38,15 +39,26 @@ class Assignment{
 class S_Assignment_info{
     public:
     S_Assignment_info();
+
+    static vector <string> submitted_links; //vector of github links submitted by students
+    static vector <string> doubts; //vector of doubts sent by students
+
     //S_Assignment_info(iteration status);
-    void set_info(iteration status , vector <string> changes);
-    void set_info(iteration status , string date);
-    void set_status(iteration status);
-    void add_change(string change);
+    // void set_info(iteration status , vector <string> changes);
+    // void set_info(iteration status , string date);
+    // void set_status(iteration status);
+    // void add_change(string change);
     void display();
     iteration get_status();
     string get_date();
     vector <string> get_changes();
+    void display_submissions();
+    void display_doubts();
+    void store_links(ofstream& fout);
+    void store_doubts(ofstream& fout);
+
+    friend class Reviewer;
+    friend vector <string> extract_student_info();
 
     private:
     iteration status = NOT_REVIEWED;

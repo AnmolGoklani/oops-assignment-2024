@@ -7,6 +7,8 @@
 
 Reviewer admin;
 
+S_Assignment_info info;
+
 void save_student_info(vector <string> student_deets){
 
     ofstream fout;
@@ -74,10 +76,11 @@ vector <string> extract_student_info(){
             
             S_Assignment_info tmp;
             getline(fin,line);//cout<<line<<endl;
-            if(line=="NOT_REVIEWED")tmp.set_status(NOT_REVIEWED);
+            if(line=="NOT_REVIEWED")tmp.status=NOT_REVIEWED;
             else if(line=="COMPLETED"){
                 getline(fin,line);//cout<<line<<endl;
-                tmp.set_info(COMPLETED,line);
+                tmp.status = COMPLETED;
+                tmp.completion_date = line;
             }
             else{
                 vector <string> temp;
@@ -87,7 +90,8 @@ vector <string> extract_student_info(){
                     if(line == "-1") break;
                     temp.push_back(line); 
                 }
-                tmp.set_info(CHANGES_PENDING, temp);
+                tmp.status = CHANGES_PENDING;
+                tmp.changes = temp;
             }
             tempo.add_assignment(tmp,tasks[i]);
         
@@ -146,13 +150,13 @@ int main(){
     while(1){
         getline(fin,line);
         if(line=="-1") break;
-        admin.add_link(line);
+        info.submitted_links.push_back(line);
     }
 
     while(1){
         getline(fin,line);
         if(line=="-1") break;
-        admin.add_doubt(line);
+        info.doubts.push_back(line);
     }
 
 
@@ -271,6 +275,7 @@ int main(){
                         string s1;
                         string s2;
                         Assignment tmp;
+                        string date;
 
                         save_student_info(student_deets);
                         student_deets = extract_student_info();
@@ -306,15 +311,15 @@ int main(){
                             admin.create_assignment(tmp);
                             break;
                         case 6:
-                            admin.display_submissions();
+                            info.display_submissions();
                             break;
                         case 7:
-                            admin.display_doubts();
+                            info.display_doubts();
                             break;
                         case 8:
                             cout<<"Enter the doubt number: ";
                             cin>>b;
-                            admin.delete_doubt(b);
+                            info.doubts.erase(info.doubts.begin()+b);
                             break;
                         case 9:
                             cout<<"Enter name of student: ";
@@ -327,13 +332,17 @@ int main(){
                             
                             break;
                         case 10:
-                            cout<<"Enter new progress status(not reviewed ,changes pending or completed): ";
-                            cin>>s2;
-                            cout<<"Enter assignment number: ";
-                            cin>>b;
                             cout<<"Enter name of student: ";
                             cin>>s1;
-                            admin.change_status(s1,s2,tasks[b-1]);
+                            cout<<"Enter assignment number: ";
+                            cin>>b;
+                            cout<<"Enter new progress status(not reviewed ,changes pending or completed): ";
+                            cin>>s2;
+                            if(s2=="completed"){
+                                cout<<"Completion date : ";
+                                cin>>date;
+                            }
+                            admin.change_status(s1,s2,tasks[b-1],date);
                             break;
                         case 11:
                             login = 0;
@@ -393,10 +402,10 @@ int main(){
     }
     fout<<"-1\n";
 
-    admin.store_links(fout);
+    info.store_links(fout);
     fout<<"-1\n";
 
-    admin.store_doubts(fout);
+    info.store_doubts(fout);
     fout<<"-1";
     fout.close();
 

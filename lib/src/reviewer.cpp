@@ -6,8 +6,7 @@ using namespace std;
 
 int Reviewer::assignments = 0;
 //map <Assignment, int* , Assignment_cmp > Reviewer::status_of_assignments;
-vector <string> Reviewer::submitted_links; 
-vector <string> Reviewer::doubts;
+
 vector <Student> Reviewer::students;
 vector <Reviewer> reviewers;
 
@@ -69,69 +68,51 @@ void Reviewer::create_assignment(Assignment tmp){
     assignments++;
 }
 
-void Reviewer::display_submissions(){
-    for( int i=0 ; i<submitted_links.size() ; ++i){
-    
-        cout<<submitted_links[i]<<endl;   
-    
-    }
-}
 
-void Reviewer::display_doubts(){
-    for( int i=0 ; i<doubts.size() ; ++i){
-    
-        cout<<doubts[i]<<endl;   
-    
-    }
-}
 
-void Reviewer::delete_doubt(int index){
-    doubts.erase(doubts.begin() + index - 1);
-}
+
 
 void Reviewer::add_change(string name, string change, Assignment assignment){
-    Student stu = students[0];
+    Student* stu = &students[0];
     int i = 1;
-    while(stu.get_name()!=name){
-        stu = students[i++];
+    while(stu->get_name()!=name){
+        stu = &students[i++];
     }
-    stu.add_change(change , assignment);
-    stu.set_status(assignment, CHANGES_PENDING);
+    S_Assignment_info& tmp = stu->get_info(assignment);
+    tmp.changes.push_back(change);
+    tmp.status = CHANGES_PENDING;
 
 }
 
-void Reviewer::change_status(string name, string new_status, Assignment assignment){
+void Reviewer::change_status(string name, string new_status, Assignment assignment, string date){
+    
+    Student* stu = &students[0];
+    int i = 1;
+    while(stu->get_name()!=name){
+        stu = &students[i++];
+    }
+
+    S_Assignment_info& tmp = stu->get_info(assignment);
+    
     if(new_status=="not reviewed"){
-        Student stu = students[0];
-        int i = 1;
-        while(stu.get_name()!=name){
-            stu = students[i++];
-        }
-        stu.set_status(assignment, NOT_REVIEWED);
+        tmp.status = NOT_REVIEWED;
     }
     else if(new_status=="changes pending"){
-        Student stu = students[0];
-        int i = 1;
-        while(stu.get_name()!=name){
-            stu = students[i++];
-        }
-        stu.set_status(assignment, CHANGES_PENDING);
+        tmp.status = CHANGES_PENDING;
     }
-    else{
-        Student stu = students[0];
-        int i = 1;
-        while(stu.get_name()!=name){
-            stu = students[i++];
-        }
-        stu.set_status(assignment, COMPLETED);
+    else if(new_status=="completed"){
+        tmp.status=COMPLETED;
+        tmp.completion_date = date;
+        tmp.changes.clear();
     }
 
     
 }
 
 void Reviewer::add_change_and_change_status(Student student, string change, Assignment assignment){
-    student.add_change(change , assignment);
-    student.set_status(assignment, CHANGES_PENDING);
+    S_Assignment_info& tmp = student.get_info(assignment);
+    tmp.changes.push_back(change);
+    tmp.status = CHANGES_PENDING;
 }
 
 //int Reviewer::get_no_of_students(){ return students.size();}
@@ -140,14 +121,17 @@ void Reviewer::add_student(Student stud){
     students.push_back(stud);
 }
 
-void Reviewer::add_link(string link){
-    submitted_links.push_back(link);
-}
-void Reviewer::add_doubt(string doubt){
-    doubts.push_back(doubt);
-}
+// void Reviewer::add_link(string link){
+//     submitted_links.push_back(link);
+// }
+// void Reviewer::add_doubt(string doubt){
+//     doubts.push_back(doubt);
+// }
     
 void Reviewer::student_functions(int i, int a , int& login){
+
+    S_Assignment_info info;
+
     switch (a)
     {
         case 1:
@@ -172,13 +156,13 @@ void Reviewer::student_functions(int i, int a , int& login){
             cout<<"Enter project link:\n";
             {string lin;
             cin>>lin;
-            add_link(lin);}
+            info.submitted_links.push_back(lin);}
             break;
         case 7:
             cout<<"Enter doubt (with name):\n";
             {string doub;
             cin>>doub;
-            add_doubt(doub);}
+            info.doubts.push_back(doub);}
             break;
         case 8:
             login = 0;
@@ -201,18 +185,3 @@ string Reviewer::get_date(int i ,Assignment assi){
     return students[i].get_date(assi);
 }
 
-void Reviewer::store_links(ofstream& fout){
-    for( int i=0 ; i<submitted_links.size() ; ++i){
-    
-        fout<<submitted_links[i]<<endl;
-    
-    }
-}
-
-void Reviewer::store_doubts(ofstream& fout){
-    for( int i=0 ; i<doubts.size() ; ++i){
-    
-        fout<<doubts[i]<<endl;
-    
-    }
-}

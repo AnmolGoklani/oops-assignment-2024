@@ -75,14 +75,18 @@ void Student::list_of_completed(){
     }
 }
 
-void Student::add_change(string change , Assignment assignment){
-    list[assignment].add_change(change);
-}
+// void Student::add_change(string change , Assignment assignment){
+//     list[assignment].add_change(change);
+// }
 
-void Student::set_status(Assignment assignment , iteration status){
-    list[assignment].set_status(status);
-    if(status == COMPLETED) pending_assignments--;
-    else if(status == NOT_REVIEWED) pending_assignments++;
+// void Student::set_status(Assignment assignment , iteration status){
+//     list[assignment].set_status(status);
+//     if(status == COMPLETED) pending_assignments--;
+//     else if(status == NOT_REVIEWED) pending_assignments++;
+// }
+
+S_Assignment_info& Student::get_info(Assignment assi){
+    return this->list[assi];
 }
 
 void Student::add_assignment(S_Assignment_info info , Assignment assignment){
@@ -108,4 +112,14 @@ string Student::get_date(Assignment assi){
 
     return list[assi].get_date();
 
+}
+
+void Student::submit(string link){
+    S_Assignment_info tmp;
+    tmp.submitted_links.push_back(link);
+}
+
+void Student::ask_doubt(string doubt){
+    S_Assignment_info tmp;
+    tmp.doubts.push_back(doubt);
 }
