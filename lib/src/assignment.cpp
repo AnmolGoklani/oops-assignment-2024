@@ -5,8 +5,6 @@
 using namespace std;
 
 int Assignment::total_assignments = 0;
-vector <string> S_Assignment_info::submitted_links; 
-vector <string> S_Assignment_info::doubts;
 
 Assignment::Assignment(string name , string deadline){
             this->name = name;

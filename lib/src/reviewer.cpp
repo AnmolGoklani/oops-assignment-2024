@@ -131,7 +131,7 @@ void Reviewer::add_student(Student stud){
 void Reviewer::student_functions(int i, int a , int& login){
 
     S_Assignment_info info;
-
+    string b;
     switch (a)
     {
         case 1:
@@ -153,16 +153,22 @@ void Reviewer::student_functions(int i, int a , int& login){
             students[i].list_of_completed();
             break;
         case 6:
+            cout<<"Enter assignment number: ";
+            cin>>b;
             cout<<"Enter project link:\n";
             {string lin;
             cin>>lin;
-            info.submitted_links.push_back(lin);}
+            S_Assignment_info tmp = get_info(students[i].get_name(),b);
+            tmp.submitted_links.push_back(lin);}
             break;
         case 7:
-            cout<<"Enter doubt (with name):\n";
+            cout<<"Enter assignment number: ";
+            cin>>b;
+            cout<<"Enter doubt:\n";
             {string doub;
             cin>>doub;
-            info.doubts.push_back(doub);}
+            S_Assignment_info tmp = get_info(students[i].get_name(),b);
+            tmp.doubts.push_back(doub);}
             break;
         case 8:
             login = 0;
@@ -185,3 +191,45 @@ string Reviewer::get_date(int i ,Assignment assi){
     return students[i].get_date(assi);
 }
 
+S_Assignment_info& Reviewer::get_info(string name,int b ){
+    Student* stu = &students[0];
+    int i = 1;
+    while(stu->get_name()!=name){
+        stu = &students[i++];
+    }
+    return stu->get_info(tasks[b-1]);
+}
+
+void Reviewer::store_links(ofstream& fout){
+    for(auto it : students){
+        string name = it.get_name();
+        for( int i=0 ; i<tasks.size() ; ++i){
+            int a = tasks[i].get_number();
+            S_Assignment_info tmp = get_info(name,a);
+            if(tmp.submitted_links.size()){
+                fout<<endl<<name<<endl;
+                fout<<to_string(a)<<endl;
+                tmp.store_links(fout);
+                fout<<"-1";
+            }
+        }
+    }
+    fout<<"\n-1";
+}
+
+void Reviewer::store_doubts(ofstream& fout){
+    for(auto it : students){
+        string name = it.get_name();
+        for( int i=0 ; i<tasks.size() ; ++i){
+            int a = tasks[i].get_number();
+            S_Assignment_info tmp = get_info(name,a);
+            if(tmp.doubts.size()){
+                fout<<endl<<name<<endl;
+                fout<<to_string(a)<<endl;
+                tmp.store_doubts(fout);
+                fout<<"-1";
+            }
+        }
+    }
+    fout<<"\n-1";
+}

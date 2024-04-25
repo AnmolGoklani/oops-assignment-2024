@@ -106,6 +106,78 @@ vector <string> extract_student_info(){
 
 }
 
+vector <string> extract_reviewer_info(){
+    ifstream fin;
+    string line;
+    vector <string> reviewer_deets;
+
+    fin.open("reviewers.txt",ios::app);
+
+    while(1){
+        getline(fin,line);
+        if(line=="-1") break;
+        reviewer_deets.push_back(line);
+    }
+
+    line = "";
+
+    while(1){
+        getline(fin,line);
+        if(line=="-1") break;
+        string name = line;
+        getline(fin,line);
+        int a = stoi(line);
+        S_Assignment_info& tmp = admin.get_info(name,a);
+        getline(fin,line);
+        while(line != "-1"){
+            tmp.submitted_links.push_back(line);
+            getline(fin,line);
+        }
+    }
+
+    while(1){
+        getline(fin,line);
+        if(line=="-1") break;
+        string name = line;
+        getline(fin,line);
+        int a = stoi(line);
+        S_Assignment_info& tmp = admin.get_info(name,a);
+        getline(fin,line);
+        while(line != "-1"){
+            tmp.doubts.push_back(line);
+            getline(fin,line);
+        }
+    }
+
+
+    fin.close();
+    return reviewer_deets;
+
+}
+
+void save_reviewer_info(vector <string> reviewer_deets){
+
+    ofstream fout;
+
+    fout.open("reviewers.txt");
+    for( int i=0 ; i<reviewer_deets.size() ; ++i){
+    
+        fout<<reviewer_deets[i]<<endl;
+    
+    }
+    fout<<"-1";
+
+
+
+    admin.store_links(fout);
+
+    admin.store_doubts(fout);
+
+    fout.close();
+
+
+}
+
 int main(){
 
     
@@ -135,37 +207,9 @@ int main(){
     //cout<<tasks.size();
 
     vector <string> student_deets = extract_student_info();
-    
-    fin.open("reviewers.txt",ios::app);
-    vector <string> reviewer_deets;
-
-    while(1){
-        getline(fin,line);
-        if(line=="-1") break;
-        reviewer_deets.push_back(line);
-    }
-
-    line = "";
-
-    while(1){
-        getline(fin,line);
-        if(line=="-1") break;
-        info.submitted_links.push_back(line);
-    }
-
-    while(1){
-        getline(fin,line);
-        if(line=="-1") break;
-        info.doubts.push_back(line);
-    }
-
-
+    vector <string> reviewer_deets = extract_reviewer_info();
 
     bool exit = false;
-
-    fin.close();
-
-    
 
     while(!exit){
 
@@ -207,9 +251,10 @@ int main(){
                         cout<<"8 to log out\n";
                         
                         cin>>a;
-                        
+                        reviewer_deets = extract_reviewer_info();
                         student_deets = extract_student_info();
                         admin.student_functions(i,a,login);
+                        save_reviewer_info(reviewer_deets);
 
                     }
                     
@@ -279,6 +324,7 @@ int main(){
 
                         save_student_info(student_deets);
                         student_deets = extract_student_info();
+                        reviewer_deets = extract_reviewer_info();
                         
                         switch (a)
                         {
@@ -352,6 +398,8 @@ int main(){
                             break;
                         }
                     
+                        save_reviewer_info(reviewer_deets);
+
                     }
 
                 }
@@ -394,20 +442,6 @@ int main(){
 
     save_student_info(student_deets);
 
-    fout.open("reviewers.txt");
-    for( int i=0 ; i<reviewer_deets.size() ; ++i){
     
-        fout<<reviewer_deets[i]<<endl;
-    
-    }
-    fout<<"-1\n";
-
-    info.store_links(fout);
-    fout<<"-1\n";
-
-    info.store_doubts(fout);
-    fout<<"-1";
-    fout.close();
-
     return 0;
 }

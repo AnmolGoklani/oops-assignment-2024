@@ -47,6 +47,10 @@ public:
     iteration get_status(int i , Assignment assi);
     vector <string> get_changes(int i ,Assignment assi);
     string get_date(int i ,Assignment assi);
+    S_Assignment_info& get_info(string name,int i );
+    void store_links(ofstream& fout);
+    void store_doubts(ofstream& fout);
+
     
 };
 

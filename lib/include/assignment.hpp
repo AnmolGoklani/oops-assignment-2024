@@ -40,8 +40,8 @@ class S_Assignment_info{
     public:
     S_Assignment_info();
 
-    static vector <string> submitted_links; //vector of github links submitted by students
-    static vector <string> doubts; //vector of doubts sent by students
+    vector <string> submitted_links; //vector of github links submitted by students
+    vector <string> doubts; //vector of doubts sent by students
 
     //S_Assignment_info(iteration status);
     // void set_info(iteration status , vector <string> changes);
