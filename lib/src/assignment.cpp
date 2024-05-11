@@ -100,18 +100,18 @@ vector <string> S_Assignment_info::get_changes(){
 }
 
 void S_Assignment_info::display_submissions(){
-    for( int i=0 ; i<submitted_links.size() ; ++i){
+    for(auto i : submitted_links){
     
-        cout<<submitted_links[i]<<endl;   
+        cout<<i<<endl;   
     
     }
 }
 
 
 void S_Assignment_info::display_doubts(){
-    for( int i=0 ; i<doubts.size() ; ++i){
+    for( auto i : doubts){
     
-        cout<<doubts[i]<<endl;   
+        cout<<i<<endl;   
     
     }
 }
@@ -121,17 +121,17 @@ void S_Assignment_info::display_doubts(){
 // }
 
 void S_Assignment_info::store_links(ofstream& fout){
-    for( int i=0 ; i<submitted_links.size() ; ++i){
+    for( auto i : submitted_links){
     
-        fout<<submitted_links[i]<<endl;
+        fout<<i<<endl;
     
     }
 }
 
 void S_Assignment_info::store_doubts(ofstream& fout){
-    for( int i=0 ; i<doubts.size() ; ++i){
+    for( auto i : doubts){
     
-        fout<<doubts[i]<<endl;
+        fout<<i<<endl;
     
     }
 }

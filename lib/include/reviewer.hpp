@@ -50,6 +50,15 @@ public:
     S_Assignment_info& get_info(string name,int i );
     void store_links(ofstream& fout);
     void store_doubts(ofstream& fout);
+    void display_submissions();
+    void display_doubts();
+    void clear_students();
+
+    void display(){
+        for(auto it : students){
+            cout<<it.get_name()<<endl;
+        }
+    }
 
     
 };

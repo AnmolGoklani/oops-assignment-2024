@@ -130,7 +130,6 @@ void Reviewer::add_student(Student stud){
     
 void Reviewer::student_functions(int i, int a , int& login){
 
-    S_Assignment_info info;
     string b;
     switch (a)
     {
@@ -158,7 +157,7 @@ void Reviewer::student_functions(int i, int a , int& login){
             cout<<"Enter project link:\n";
             {string lin;
             cin>>lin;
-            S_Assignment_info tmp = get_info(students[i].get_name(),b);
+            S_Assignment_info& tmp = get_info(students[i].get_name(),b);
             tmp.submitted_links.push_back(lin);}
             break;
         case 7:
@@ -167,7 +166,7 @@ void Reviewer::student_functions(int i, int a , int& login){
             cout<<"Enter doubt:\n";
             {string doub;
             cin>>doub;
-            S_Assignment_info tmp = get_info(students[i].get_name(),b);
+            S_Assignment_info& tmp = get_info(students[i].get_name(),b);
             tmp.doubts.push_back(doub);}
             break;
         case 8:
@@ -211,6 +210,7 @@ void Reviewer::store_links(ofstream& fout){
                 fout<<to_string(a)<<endl;
                 tmp.store_links(fout);
                 fout<<"-1";
+                
             }
         }
     }
@@ -221,15 +221,60 @@ void Reviewer::store_doubts(ofstream& fout){
     for(auto it : students){
         string name = it.get_name();
         for( int i=0 ; i<tasks.size() ; ++i){
-            int a = tasks[i].get_number();
-            S_Assignment_info tmp = get_info(name,a);
+            S_Assignment_info tmp = get_info(name,i+1);
             if(tmp.doubts.size()){
                 fout<<endl<<name<<endl;
-                fout<<to_string(a)<<endl;
+                fout<<to_string(i+1)<<endl;
                 tmp.store_doubts(fout);
                 fout<<"-1";
             }
         }
     }
     fout<<"\n-1";
+}
+
+
+void Reviewer::display_submissions(){
+    for(auto it : students){
+        int print = 0;
+        for( int i=0 ; i<tasks.size() ; ++i){
+        
+            S_Assignment_info tmp = get_info(it.get_name(),i+1);
+            
+            if(tmp.submitted_links.size()){
+                if(!print){
+                    cout<<it.get_name()<<endl;
+                    print = 1;
+                }
+                cout<<i+1<<". "<<tasks[i].get_name()<<": "<<endl;
+                tmp.display_submissions();
+            }
+        
+        }
+    }
+}
+
+void Reviewer::display_doubts(){
+    for(auto it : students){
+        int print = 0;
+        for( int i=0 ; i<tasks.size() ; ++i){
+        
+            S_Assignment_info tmp = get_info(it.get_name(),i+1);
+            
+            if(tmp.doubts.size()){
+                if(!print){
+                    cout<<it.get_name()<<endl;
+                    print = 1;
+                }
+                cout<<i+1<<". "<<tasks[i].get_name()<<": "<<endl;
+                tmp.display_doubts();
+            }
+        
+        }
+    }
+}
+
+
+void Reviewer::clear_students(){
+    students.clear();
 }

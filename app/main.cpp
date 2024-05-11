@@ -63,6 +63,7 @@ vector <string> extract_student_info(){
     fin.open("students.txt");
     getline(fin,line);
     vector <string> student_deets;
+    admin.clear_students();
     while(getline(fin,line)){
         //cout<<line<<endl;
         string name = line;
@@ -129,11 +130,14 @@ vector <string> extract_reviewer_info(){
         int a = stoi(line);
         S_Assignment_info& tmp = admin.get_info(name,a);
         getline(fin,line);
+        tmp.submitted_links.clear();
         while(line != "-1"){
             tmp.submitted_links.push_back(line);
             getline(fin,line);
         }
     }
+
+    line = "";
 
     while(1){
         getline(fin,line);
@@ -143,6 +147,7 @@ vector <string> extract_reviewer_info(){
         int a = stoi(line);
         S_Assignment_info& tmp = admin.get_info(name,a);
         getline(fin,line);
+        tmp.doubts.clear();
         while(line != "-1"){
             tmp.doubts.push_back(line);
             getline(fin,line);
@@ -251,10 +256,24 @@ int main(){
                         cout<<"8 to log out\n";
                         
                         cin>>a;
-                        reviewer_deets = extract_reviewer_info();
+
+                        
+                        
+
+                        // for( int i=0 ; i<tasks.size() ; ++i){
+    
+                        //     cout<<tasks[i].get_name()<<endl;
+                        
+                        // }
+
+                        // admin.display();
+
                         student_deets = extract_student_info();
+                        reviewer_deets = extract_reviewer_info();
                         admin.student_functions(i,a,login);
                         save_reviewer_info(reviewer_deets);
+
+            
 
                     }
                     
@@ -310,12 +329,16 @@ int main(){
                         cout<<"5 to create an assignment\n";
                         cout<<"6 to display submissions\n";
                         cout<<"7 to display doubts\n";
-                        cout<<"8 to delete a doubt\n";
-                        cout<<"9 to add a change to assignment for a student\n";
-                        cout<<"10 to change the progress status of a student for an assignment\n";
-                        cout<<"11 to logout\n";
+                        cout<<"8 to add a change to assignment for a student\n";
+                        cout<<"9 to change the progress status of a student for an assignment\n";
+                        cout<<"10 to logout\n";
 
                         cin>>a;
+
+                        cout<<endl;
+                        
+                        //admin.display();
+
                         int b;
                         string s1;
                         string s2;
@@ -357,17 +380,12 @@ int main(){
                             admin.create_assignment(tmp);
                             break;
                         case 6:
-                            info.display_submissions();
+                            admin.display_submissions();
                             break;
                         case 7:
-                            info.display_doubts();
+                            admin.display_doubts();
                             break;
                         case 8:
-                            cout<<"Enter the doubt number: ";
-                            cin>>b;
-                            info.doubts.erase(info.doubts.begin()+b);
-                            break;
-                        case 9:
                             cout<<"Enter name of student: ";
                             cin>>s1;
                             cout<<"Enter assignment number: ";
@@ -377,7 +395,7 @@ int main(){
                             admin.add_change(s1,s2,tasks[b-1]);
                             
                             break;
-                        case 10:
+                        case 9:
                             cout<<"Enter name of student: ";
                             cin>>s1;
                             cout<<"Enter assignment number: ";
@@ -390,7 +408,7 @@ int main(){
                             }
                             admin.change_status(s1,s2,tasks[b-1],date);
                             break;
-                        case 11:
+                        case 10:
                             login = 0;
                             break;
                         default:
